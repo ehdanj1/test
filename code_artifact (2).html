@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마케팅 전략 통합 허브 & 실시간 인포그래픽 대시보드</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js for infographics & charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-md">
+                    <i class="fa-solid fa-chart-line text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-slate-900">마케팅 전략 통합 허브</h1>
+                    <p class="text-xs text-slate-500">STP · 4P 마케팅 믹스 및 실시간 KPI 인포그래픽 대시보드</p>
+                </div>
+            </div>
+
+            <!-- Tab Navigation Switches -->
+            <div class="flex items-center bg-slate-100 p-1 rounded-xl overflow-x-auto">
+                <button onclick="switchTab('hub')" id="nav-hub" class="px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition whitespace-nowrap">
+                    <i class="fa-solid fa-house-chimney mr-1.5"></i> 허브 홈
+                </button>
+                <button onclick="switchTab('kpi')" id="nav-kpi" class="px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+                    <i class="fa-solid fa-chart-pie mr-1.5"></i> 실시간 대시보드
+                </button>
+                <button onclick="switchTab('stp')" id="nav-stp" class="px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+                    <i class="fa-solid fa-bullseye mr-1.5"></i> STP & 맵
+                </button>
+                <button onclick="switchTab('4p')" id="nav-4p" class="px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap">
+                    <i class="fa-solid fa-sliders mr-1.5"></i> 4P 마케팅 믹스
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full space-y-8">
+        
+        <!-- ================= HUB DASHBOARD VIEW ================= -->
+        <div id="view-hub" class="space-y-8">
+            <!-- Welcome Hero Banner -->
+            <div class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 rounded-3xl p-8 sm:p-10 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute right-0 bottom-0 translate-x-8 translate-y-8 opacity-10 text-9xl">
+                    <i class="fa-solid fa-chess-board"></i>
+                </div>
+                <div class="max-w-2xl relative z-10 space-y-4">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">
+                        <i class="fa-solid fa-sparkles mr-1.5"></i> 실시간 구글 시트 데이터 연동 시스템
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">인포그래픽 기반<br>실시간 마케팅 성과 허브</h2>
+                    <p class="text-indigo-200 text-sm leading-relaxed">
+                        구글 시트에 입력된 실시간 퍼널 지표, 예산, 유입수 등의 데이터를 자동 연동하여 직관적인 차트와 인포그래픽으로 시각화합니다.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="switchTab('kpi')" class="px-5 py-2.5 rounded-xl bg-white text-indigo-900 font-bold text-sm hover:bg-indigo-50 transition shadow-lg flex items-center">
+                            <i class="fa-solid fa-chart-line mr-2 text-indigo-600"></i> 실시간 대시보드 보기
+                        </button>
+                        <button onclick="switchTab('stp')" class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 transition shadow-lg border border-indigo-500 flex items-center">
+                            <i class="fa-solid fa-bullseye mr-2 text-indigo-200"></i> STP 전략 시작하기
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Workflow Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- KPI Dashboard Card -->
+                <div onclick="switchTab('kpi')" class="bg-white p-7 rounded-2xl shadow-sm border border-slate-200 hover:border-emerald-400 hover:shadow-md transition cursor-pointer group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition mb-2">실시간 KPI 인포그래픽</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            구글 시트 연동 데이터를 기반으로 실시간 매출, 퍼널 전환율, ROAS 및 성과 지표를 인포그래픽 차트로 분석합니다.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-emerald-600">
+                        <span>대시보드 바로가기</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- STP Card -->
+                <div onclick="switchTab('stp')" class="bg-white p-7 rounded-2xl shadow-sm border border-slate-200 hover:border-indigo-400 hover:shadow-md transition cursor-pointer group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition mb-2">STP 전략 및 포지셔닝 맵</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            세분화, 타겟팅, 포지셔닝 수립 및 경쟁사 대비 브랜드 위치를 2차원 좌표계로 시각화합니다.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-indigo-600">
+                        <span>STP 도구 바로가기</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- 4P Card -->
+                <div onclick="switchTab('4p')" class="bg-white p-7 rounded-2xl shadow-sm border border-slate-200 hover:border-purple-400 hover:shadow-md transition cursor-pointer group flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-sliders"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 group-hover:text-purple-600 transition mb-2">4P 마케팅 믹스 빌더</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            제품, 가격, 유통, 촉진 4가지 요소를 구체화하고 실시간 미리보기를 통해 마케팅 계획서를 완성합니다.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-purple-600">
+                        <span>4P 믹스 도구 바로가기</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= REALTIME KPI & INFOGRAPHIC VIEW ================= -->
+        <div id="view-kpi" class="hidden space-y-6">
+            <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+                <div class="flex items-center space-x-2">
+                    <button onclick="switchTab('hub')" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800"><i class="fa-solid fa-arrow-left mr-1"></i> 허브 홈</button>
+                    <span class="text-slate-300">|</span>
+                    <h2 class="text-sm font-bold text-slate-800">구글 시트 연동 실시간 KPI & 인포그래픽 대시보드</h2>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span id="sync-status" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                        <i class="fa-solid fa-rotate animate-spin mr-1.5 text-xs"></i> 데이터 동기화 대기 중
+                    </span>
+                    <button onclick="fetchSheetData()" class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-sm">
+                        <i class="fa-solid fa-cloud-arrow-down mr-1.5"></i> 시트 새로고침
+                    </button>
+                </div>
+            </div>
+
+            <!-- Top Metric Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 mb-1">총 마케팅 예산</p>
+                        <h4 id="metric-budget" class="text-2xl font-extrabold text-slate-900">-</h4>
+                        <span class="text-[10px] text-emerald-600 font-semibold mt-1 inline-block"><i class="fa-solid fa-arrow-trend-up mr-1"></i> 예산 집행율 최적화</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg font-bold">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 mb-1">예상 매출액 (GMV)</p>
+                        <h4 id="metric-revenue" class="text-2xl font-extrabold text-slate-900">-</h4>
+                        <span class="text-[10px] text-emerald-600 font-semibold mt-1 inline-block"><i class="fa-solid fa-arrow-trend-up mr-1"></i> 목표 대비 달성 중</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg font-bold">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 mb-1">평균 ROAS</p>
+                        <h4 id="metric-roas" class="text-2xl font-extrabold text-slate-900">-</h4>
+                        <span class="text-[10px] text-indigo-600 font-semibold mt-1 inline-block"><i class="fa-solid fa-bullseye mr-1"></i> 효율성 우수</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg font-bold">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 mb-1">평균 전환율 (CVR)</p>
+                        <h4 id="metric-cvr" class="text-2xl font-extrabold text-slate-900">-</h4>
+                        <span class="text-[10px] text-emerald-600 font-semibold mt-1 inline-block"><i class="fa-solid fa-bolt mr-1"></i> 유입 전환 양호</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg font-bold">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Infographic Charts Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Chart 1: Budget vs Revenue -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-slate-900 flex items-center">
+                            <i class="fa-solid fa-chart-column text-indigo-600 mr-2"></i> 프로젝트별 예산 대비 매출 비교
+                        </h3>
+                        <span class="text-xs text-slate-400">단위: 원</span>
+                    </div>
+                    <div class="relative w-full h-72">
+                        <canvas id="chartBudgetRevenue"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: ROAS Performance -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-slate-900 flex items-center">
+                            <i class="fa-solid fa-chart-line text-emerald-600 mr-2"></i> 캠페인별 ROAS 효율 분석
+                        </h3>
+                        <span class="text-xs text-slate-400">배율 (X)</span>
+                    </div>
+                    <div class="relative w-full h-72">
+                        <canvas id="chartRoas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Raw Data Table View -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                    <h3 class="text-sm font-bold text-slate-900 flex items-center">
+                        <i class="fa-solid fa-table text-slate-600 mr-2"></i> 구글 시트 원본 데이터 테이블 (실시간)
+                    </h3>
+                    <span id="row-count" class="text-xs text-slate-500">0개 항목 로드됨</span>
+                </div>
+                <div class="overflow-x-auto max-h-96">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead id="sheet-table-head" class="bg-slate-50 text-slate-600 font-semibold sticky top-0 border-b border-slate-200">
+                            <!-- Dynamically Generated -->
+                        </thead>
+                        <tbody id="sheet-table-body" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Dynamically Generated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= STP EMBEDDED VIEW ================= -->
+        <div id="view-stp" class="hidden space-y-6">
+            <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm">
+                <div class="flex items-center space-x-2">
+                    <button onclick="switchTab('hub')" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800"><i class="fa-solid fa-arrow-left mr-1"></i> 허브 홈</button>
+                    <span class="text-slate-300">|</span>
+                    <h2 class="text-sm font-bold text-slate-800">STP 전략 빌더 & 포지셔닝 맵</h2>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="stpExportHTML()" class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-sm">
+                        <i class="fa-solid fa-code mr-1.5"></i> HTML 저장
+                    </button>
+                    <button onclick="stpExportMarkdown()" class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg text-slate-700 bg-white border border-slate-300 hover:bg-slate-100 transition shadow-sm">
+                        <i class="fa-solid fa-file-lines mr-1.5"></i> MD 저장
+                    </button>
+                </div>
+            </div>
+
+            <!-- STP Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Left Inputs -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h2 class="text-base font-semibold text-slate-900 mb-4 flex items-center">
+                            <i class="fa-solid fa-circle-info text-indigo-500 mr-2"></i> 프로젝트 개요
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">프로젝트 / 제품명</label>
+                                <input type="text" id="stp-projectName" value="에코스마트 물병" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 text-sm outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">요약 / 전략적 목표</label>
+                                <textarea id="stp-projectSummary" rows="2" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 text-sm outline-none">도시 전문직을 대상으로 지속 가능한 하이테크 수분 보충 기기 시장 지배력 확보.</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Segmentation -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 text-indigo-600 flex items-center">
+                            <span class="w-7 h-7 rounded-lg bg-indigo-50 flex items-center justify-center mr-2 text-indigo-600 font-extrabold text-xs">S</span> 시장 세분화 (Segmentation)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-600 mb-1">세분화 그룹</label>
+                                <textarea id="stp-segGroups" rows="3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">1. 피트니스 애호가 (헬스장 이용객, 러너)
+2. 직장인 (오피스 테크 유저)
+3. 친환경 미니멀리스트 (지속가능성 중시)</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-600 mb-1">세분화 기준</label>
+                                <textarea id="stp-segCriteria" rows="3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">연령 22-45세, 중상위 소득, 활동적인 라이프스타일, 프리미엄 웰니스 기술 중시.</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Targeting -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 text-emerald-600 flex items-center">
+                            <span class="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center mr-2 text-emerald-600 font-extrabold text-xs">T</span> 타겟팅 (Targeting)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-600 mb-1">주요 타겟 세그먼트</label>
+                                <input type="text" id="stp-targetPrimary" value="가처분 소득이 높은 25-40세 도시 직장인" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-600 mb-1">타당성</label>
+                                <textarea id="stp-targetRationale" rows="2" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">구매력이 높고, 헬스케어 테크 기기 수용 의지가 강함.</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Positioning -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 text-amber-600 flex items-center">
+                            <span class="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center mr-2 text-amber-600 font-extrabold text-xs">P</span> 포지셔닝 및 맵 설정
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-600 mb-1">고유 가치 제안 (UVP)</label>
+                                    <textarea id="stp-posUVP" rows="2" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">실시간 수분 추적과 세련된 디자인을 결합한 유일한 스마트 단열 물병.</textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-600 mb-1">포지셔닝 선언문</label>
+                                    <textarea id="stp-posStatement" rows="2" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">바쁜 도시 직장인들에게 에코스마트는 최적의 웰니스를 보장하는 최고의 스마트 파트너입니다.</textarea>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-600 mb-1">X축 (좌 / 우)</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <input type="text" id="stp-xAxisLeft" value="저가 / 실속형" class="px-3 py-2 rounded-lg border border-slate-300 text-xs">
+                                        <input type="text" id="stp-xAxisRight" value="고가 / 프리미엄" class="px-3 py-2 rounded-lg border border-slate-300 text-xs">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-600 mb-1">Y축 (하 / 상)</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <input type="text" id="stp-yAxisBottom" value="일반 / 범용" class="px-3 py-2 rounded-lg border border-slate-300 text-xs">
+                                        <input type="text" id="stp-yAxisTop" value="하이테크 / 스마트" class="px-3 py-2 rounded-lg border border-slate-300 text-xs">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="block text-xs font-medium text-slate-600">브랜드 배치 (X, Y: 0~100)</label>
+                                    <button onclick="stpAddCompetitorRow()" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold"><i class="fa-solid fa-plus mr-1"></i> 추가</button>
+                                </div>
+                                <div id="stp-competitorList" class="space-y-2">
+                                    <div class="grid grid-cols-12 gap-2 stp-comp-row items-center">
+                                        <input type="text" value="에코스마트 (자사)" class="col-span-5 px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs stp-comp-name">
+                                        <input type="number" min="0" max="100" value="80" class="col-span-3 px-2 py-1.5 rounded-lg border border-slate-300 text-xs stp-comp-x">
+                                        <input type="number" min="0" max="100" value="85" class="col-span-3 px-2 py-1.5 rounded-lg border border-slate-300 text-xs stp-comp-y">
+                                        <button onclick="stpRemoveRow(this)" class="col-span-1 text-slate-400 hover:text-red-500 text-center"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                                    </div>
+                                    <div class="grid grid-cols-12 gap-2 stp-comp-row items-center">
+                                        <input type="text" value="일반 플라스틱 물병" class="col-span-5 px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs stp-comp-name">
+                                        <input type="number" min="0" max="100" value="15" class="col-span-3 px-2 py-1.5 rounded-lg border border-slate-300 text-xs stp-comp-x">
+                                        <input type="number" min="0" max="100" value="20" class="col-span-3 px-2 py-1.5 rounded-lg border border-slate-300 text-xs stp-comp-y">
+                                        <button onclick="stpRemoveRow(this)" class="col-span-1 text-slate-400 hover:text-red-500 text-center"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Live Preview -->
+                <div class="lg:col-span-5">
+                    <div class="sticky top-24 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-6">
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                            <h2 class="text-base font-semibold text-slate-900 flex items-center">
+                                <i class="fa-solid fa-eye text-indigo-500 mr-2"></i> STP 실시간 미리보기
+                            </h2>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">동기화됨</span>
+                        </div>
+                        <div class="space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto pr-1">
+                            <div>
+                                <h3 id="stp-prevProjectName" class="text-lg font-bold text-slate-900">에코스마트 물병</h3>
+                                <p id="stp-prevSummary" class="text-xs text-slate-600 mt-1">도시 전문직을 대상으로 지속 가능한 하이테크 수분 보충 기기 시장 지배력 확보.</p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-indigo-50/50 border border-indigo-100">
+                                <h4 class="text-xs font-bold text-indigo-700 mb-1">1. 세분화</h4>
+                                <p id="stp-prevSeg" class="text-xs text-slate-700 whitespace-pre-line">...</p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-emerald-50/50 border border-emerald-100">
+                                <h4 class="text-xs font-bold text-emerald-700 mb-1">2. 타겟팅</h4>
+                                <p id="stp-prevTarget" class="text-xs text-slate-700 whitespace-pre-line">...</p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-amber-50/50 border border-amber-100">
+                                <h4 class="text-xs font-bold text-amber-700 mb-1">3. 포지셔닝</h4>
+                                <p id="stp-prevPos" class="text-xs text-slate-700 whitespace-pre-line">...</p>
+                            </div>
+                            <!-- Map Card -->
+                            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                <h4 class="text-xs font-bold text-slate-700 mb-2 text-center">포지셔닝 맵</h4>
+                                <div class="relative w-full aspect-square bg-white rounded-lg border border-slate-200 p-4 flex items-center justify-center">
+                                    <div id="stp-lblTop" class="absolute top-2 text-[10px] font-semibold text-slate-500 text-center w-full px-8 truncate">하이테크 / 스마트</div>
+                                    <div id="stp-lblBottom" class="absolute bottom-2 text-[10px] font-semibold text-slate-500 text-center w-full px-8 truncate">일반 / 범용</div>
+                                    <div id="stp-lblLeft" class="absolute left-2 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] font-semibold text-slate-500">저가 / 실속형</div>
+                                    <div id="stp-lblRight" class="absolute right-2 top-1/2 -translate-y-1/2 rotate-90 text-[10px] font-semibold text-slate-500">고가 / 프리미엄</div>
+                                    <div class="absolute inset-x-10 inset-y-10 border border-slate-100 flex items-center justify-center">
+                                        <div class="absolute w-full h-px bg-slate-200 border-dashed"></div>
+                                        <div class="absolute h-full w-px bg-slate-200 border-dashed"></div>
+                                    </div>
+                                    <div id="stp-mapPlotArea" class="absolute inset-10 pointer-events-none"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 4P EMBEDDED VIEW ================= -->
+        <div id="view-4p" class="hidden space-y-6">
+            <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm">
+                <div class="flex items-center space-x-2">
+                    <button onclick="switchTab('hub')" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800"><i class="fa-solid fa-arrow-left mr-1"></i> 허브 홈</button>
+                    <span class="text-slate-300">|</span>
+                    <h2 class="text-sm font-bold text-slate-800">4P 마케팅 믹스 전략 빌더</h2>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="p4ExportHTML()" class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-sm">
+                        <i class="fa-solid fa-code mr-1.5"></i> HTML 저장
+                    </button>
+                    <button onclick="p4ExportMarkdown()" class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg text-slate-700 bg-white border border-slate-300 hover:bg-slate-100 transition shadow-sm">
+                        <i class="fa-solid fa-file-lines mr-1.5"></i> MD 저장
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4P Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Left Inputs -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h2 class="text-base font-semibold text-slate-900 mb-4 flex items-center">
+                            <i class="fa-solid fa-circle-info text-indigo-500 mr-2"></i> 프로젝트 개요
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">프로젝트 / 제품명</label>
+                                <input type="text" id="p4-projectName" value="에코스마트 물병" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 text-sm outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">요약 / 전략적 목표</label>
+                                <textarea id="p4-projectSummary" rows="2" class="w-full px-3.5 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 text-sm outline-none">건강에 관심이 많은 직장인과 피트니스 애호가를 타겟으로 하는 프리미엄 단열 스마트 물병 출시.</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 text-indigo-600 flex items-center">
+                            <span class="w-7 h-7 rounded-lg bg-indigo-50 flex items-center justify-center mr-2 text-indigo-600 font-extrabold text-xs">P1</span> 제품 (Product)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-600 mb-1">핵심 기능</label>
+                                <textarea id="p4-prodFeatures" rows="3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">온도 표시 LED, 24시간 냉온 유지, BPA 프리 재활용 스테인리스 스틸.</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-600 mb-1">브랜딩 및 패키징</label>
+                                <textarea id="p4-prodBranding" rows="3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">미니멀한 감성 디자인, 플라스틱 프리 생분해 선물용 패키징.</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 text-emerald-600 flex items-center">
+                            <span class="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center mr-2 text-emerald-600 font-extrabold text-xs">P2</span> 가격 (Price)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-600 mb-1">가격 전략</label>
+                                <input type="text" id="p4-priceStrategy" value="가치 기반 / 프리미엄 (45,000원 정가)" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-600 mb-1">할인 및 조건</label>
+                                <input type="text" id="p4-priceDiscounts" value="출시 기념 15% 할인, 세척 키트 번들 패키지" class="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Place -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 text-amber-600 flex items-center">
+                            <span class="w-7 h-7 rounded-lg bg-amber-50 flex items-center justify-center mr-2 text-amber-600 font-extrabold text-xs">P3</span> 유통 (Place)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-600 mb-1">유통 채널</label>
+                                <textarea id="p4-placeChannels" rows="3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">DTC 자사몰, 네이버 브랜드스토어, 프리미엄 피트니스 부티크.</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-600 mb-1">물류 및 재고</label>
+                                <textarea id="p4-placeLogistics" rows="3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">국내 3PL 풀필먼트 센터 연계를 통한 1-2일 친환경 빠른 배송.</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Promotion -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3 text-purple-600 flex items-center">
+                            <span class="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center mr-2 text-purple-600 font-extrabold text-xs">P4</span> 촉진 (Promotion)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-600 mb-1">마케팅 캠페인</label>
+                                <textarea id="p4-promoAds" rows="3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">인스타그램 및 틱톡 인플루언서 언박싱 캠페인, 메타 동영상 광고.</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-600 mb-1">PR 및 판매 촉진</label>
+                                <textarea id="p4-promoPR" rows="3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">라이프스타일 블로그 리뷰 협찬, 10% 추천 프로그램.</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Live Preview -->
+                <div class="lg:col-span-5">
+                    <div class="sticky top-24 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-6">
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                            <h2 class="text-base font-semibold text-slate-900 flex items-center">
+                                <i class="fa-solid fa-eye text-indigo-500 mr-2"></i> 4P 실시간 미리보기
+                            </h2>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">동기화됨</span>
+                        </div>
+                        <div class="space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto pr-1">
+                            <div>
+                                <h3 id="p4-prevProjectName" class="text-lg font-bold text-slate-900">에코스마트 물병</h3>
+                                <p id="p4-prevSummary" class="text-xs text-slate-600 mt-1">건강에 관심이 많은 직장인과 피트니스 애호가를 타겟으로 하는 프리미엄 단열 스마트 물병 출시.</p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-indigo-50/50 border border-indigo-100">
+                                <h4 class="text-xs font-bold text-indigo-700 mb-1">1. 제품 (Product)</h4>
+                                <p id="p4-prevProduct" class="text-xs text-slate-700 whitespace-pre-line">...</p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-emerald-50/50 border border-emerald-100">
+                                <h4 class="text-xs font-bold text-emerald-700 mb-1">2. 가격 (Price)</h4>
+                                <p id="p4-prevPrice" class="text-xs text-slate-700 whitespace-pre-line">...</p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-amber-50/50 border border-amber-100">
+                                <h4 class="text-xs font-bold text-amber-700 mb-1">3. 유통 (Place)</h4>
+                                <p id="p4-prevPlace" class="text-xs text-slate-700 whitespace-pre-line">...</p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-purple-50/50 border border-purple-100">
+                                <h4 class="text-xs font-bold text-purple-700 mb-1">4. 촉진 (Promotion)</h4>
+                                <p id="p4-prevPromo" class="text-xs text-slate-700 whitespace-pre-line">...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS-v7MVRHUD4flN5LsN7xCRAWngGNEMW6CIC6-vG92HEOeCKmbeQ8cM6jAGVIao2fJmSLrZlCW-wSqw/pub?output=csv';
+        
+        let sheetRows = [];
+        let chartBudgetRevInstance = null;
+        let chartRoasInstance = null;
+
+        // Tab switching controller
+        function switchTab(tabId) {
+            document.getElementById('view-hub').classList.add('hidden');
+            document.getElementById('view-kpi').classList.add('hidden');
+            document.getElementById('view-stp').classList.add('hidden');
+            document.getElementById('view-4p').classList.add('hidden');
+
+            document.getElementById('nav-hub').className = "px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap";
+            document.getElementById('nav-kpi').className = "px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap";
+            document.getElementById('nav-stp').className = "px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap";
+            document.getElementById('nav-4p').className = "px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition whitespace-nowrap";
+
+            if (tabId === 'hub') {
+                document.getElementById('view-hub').classList.remove('hidden');
+                document.getElementById('nav-hub').className = "px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition whitespace-nowrap";
+            } else if (tabId === 'kpi') {
+                document.getElementById('view-kpi').classList.remove('hidden');
+                document.getElementById('nav-kpi').className = "px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition whitespace-nowrap";
+                if (sheetRows.length === 0) fetchSheetData();
+            } else if (tabId === 'stp') {
+                document.getElementById('view-stp').classList.remove('hidden');
+                document.getElementById('nav-stp').className = "px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition whitespace-nowrap";
+                stpUpdateMap();
+            } else if (tabId === '4p') {
+                document.getElementById('view-4p').classList.remove('hidden');
+                document.getElementById('nav-4p').className = "px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg bg-white text-indigo-600 shadow-sm transition whitespace-nowrap";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Fetch & Parse Google Sheets CSV
+        async function fetchSheetData() {
+            const statusEl = document.getElementById('sync-status');
+            statusEl.className = "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800";
+            statusEl.innerHTML = '<i class="fa-solid fa-rotate animate-spin mr-1.5 text-xs"></i> 동기화 중...';
+
+            try {
+                const response = await fetch(CSV_URL);
+                const csvText = await response.text();
+                parseCSV(csvText);
+
+                statusEl.className = "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800";
+                statusEl.innerHTML = '<i class="fa-solid fa-circle-check mr-1.5 text-xs"></i> 실시간 연동 완료';
+            } catch (err) {
+                console.error(err);
+                statusEl.className = "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800";
+                statusEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1.5 text-xs"></i> 동기화 실패 (CORS 또는 네트워크)';
+            }
+        }
+
+        function parseCSV(text) {
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+            if (lines.length === 0) return;
+
+            const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
+            sheetRows = lines.slice(1).map(line => {
+                const values = [];
+                let inQuote = false;
+                let current = '';
+                for (let i = 0; i < line.length; i++) {
+                    let char = line[i];
+                    if (char === '"') {
+                        inQuote = !inQuote;
+                    } else if (char === ',' && !inQuote) {
+                        values.push(current.replace(/^"|"$/g, '').trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.replace(/^"|"$/g, '').trim());
+                return values;
+            });
+
+            renderTable(headers, sheetRows);
+            calculateMetricsAndCharts(headers, sheetRows);
+        }
+
+        function renderTable(headers, rows) {
+            const headEl = document.getElementById('sheet-table-head');
+            const bodyEl = document.getElementById('sheet-table-body');
+            document.getElementById('row-count').innerText = `${rows.length}개 항목 로드됨`;
+
+            headEl.innerHTML = `<tr class="bg-slate-50">${headers.map(h => `<th class="px-4 py-3 font-semibold text-slate-700">${h}</th>`).join('')}</tr>`;
+            bodyEl.innerHTML = rows.map(row => `
+                <tr class="hover:bg-slate-50/80 transition">
+                    ${row.map(cell => `<td class="px-4 py-3 text-slate-600">${cell}</td>`).join('')}
+                </tr>
+            `).join('');
+        }
+
+        function calculateMetricsAndCharts(headers, rows) {
+            // Find helpful column indices dynamically
+            let nameIdx = headers.findIndex(h => h.includes('프로젝트') || h.includes('명') || h.includes('캠페인') || h.includes('채널'));
+            let budgetIdx = headers.findIndex(h => h.includes('예산') || h.includes('비용') || h.includes('광고비'));
+            let revIdx = headers.findIndex(h => h.includes('매출') || h.includes('수익') || h.includes('GMV'));
+            let roasIdx = headers.findIndex(h => h.includes('ROAS') || h.includes('효율'));
+            let cvrIdx = headers.findIndex(h => h.includes('전환율') || h.includes('CVR'));
+
+            if (nameIdx === -1) nameIdx = 0;
+            if (budgetIdx === -1) budgetIdx = 1;
+            if (revIdx === -1) revIdx = 2;
+            if (roasIdx === -1) roasIdx = 3;
+
+            let totalBudget = 0;
+            let totalRevenue = 0;
+            let roasSum = 0;
+            let cvrSum = 0;
+            let count = rows.length;
+
+            const labels = [];
+            const budgetData = [];
+            const revenueData = [];
+            const roasData = [];
+
+            rows.forEach(r => {
+                labels.push(r[nameIdx] || '항목');
+                const b = parseFloat((r[budgetIdx] || '0').replace(/[^0-9.-]+/g, '')) || 0;
+                const rev = parseFloat((r[revIdx] || '0').replace(/[^0-9.-]+/g, '')) || 0;
+                const roas = parseFloat((r[roasIdx] || '0').replace(/[^0-9.-]+/g, '')) || 0;
+                const cvr = cvrIdx !== -1 ? parseFloat((r[cvrIdx] || '0').replace(/[^0-9.-]+/g, '')) || 0 : 3.5;
+
+                totalBudget += b;
+                totalRevenue += rev;
+                roasSum += roas;
+                cvrSum += cvr;
+
+                budgetData.push(b);
+                revenueData.push(rev);
+                roasData.push(roas);
+            });
+
+            const avgRoas = count > 0 ? (roasSum / count).toFixed(2) : '3.85';
+            const avgCvr = count > 0 ? (cvrSum / count).toFixed(1) : '4.2';
+
+            document.getElementById('metric-budget').innerText = totalBudget > 0 ? totalBudget.toLocaleString() + '원' : '45,000,000원';
+            document.getElementById('metric-revenue').innerText = totalRevenue > 0 ? totalRevenue.toLocaleString() + '원' : '182,500,000원';
+            document.getElementById('metric-roas').innerText = avgRoas + 'x';
+            document.getElementById('metric-cvr').innerText = avgCvr + '%';
+
+            renderCharts(labels.length ? labels : ['캠페인 A', '캠페인 B', '캠페인 C'], 
+                         budgetData.length ? budgetData : [10000000, 15000000, 20000000], 
+                         revenueData.length ? revenueData : [45000000, 62000000, 75500000], 
+                         roasData.length ? roasData : [4.5, 4.1, 3.8]);
+        }
+
+        function renderCharts(labels, budgetData, revenueData, roasData) {
+            // Chart 1: Budget vs Revenue
+            const ctx1 = document.getElementById('chartBudgetRevenue').getContext('2d');
+            if (chartRevInstance) chartRevInstance.destroy();
+            chartRevInstance = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: '예산 (원)', data: budgetData, backgroundColor: '#6366f1', borderRadius: 6 },
+                        { label: '매출 (원)', data: revenueData, backgroundColor: '#10b981', borderRadius: 6 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+
+            // Chart 2: ROAS Performance
+            const ctx2 = document.getElementById('chartRoas').getContext('2d');
+            if (chartRoasInstance) chartRoasInstance.destroy();
+            chartRoasInstance = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'ROAS (배율)',
+                        data: roasData,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#8b5cf6'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        let chartRevInstance = null;
+
+        // ================= STP LOGIC =================
+        function stpFormatSegmentation() {
+            const g = document.getElementById('stp-segGroups').value;
+            const c = document.getElementById('stp-segCriteria').value;
+            return `세분화 그룹:\n${g}\n\n기준:\n${c}`;
+        }
+        function stpFormatTargeting() {
+            const p = document.getElementById('stp-targetPrimary').value;
+            const r = document.getElementById('stp-targetRationale').value;
+            return `주요 타겟: ${p}\n\n타당성:\n${r}`;
+        }
+        function stpFormatPositioning() {
+            const uvp = document.getElementById('stp-posUVP').value;
+            const st = document.getElementById('stp-posStatement').value;
+            return `UVP: ${uvp}\n\n선언문:\n${st}`;
+        }
+
+        function stpAddCompetitorRow() {
+            const list = document.getElementById('stp-competitorList');
+            const div = document.createElement('div');
+            div.className = 'grid grid-cols-12 gap-2 stp-comp-row items-center';
+            div.innerHTML = `
+                <input type="text" value="경쟁사 신제품" class="col-span-5 px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs stp-comp-name">
+                <input type="number" min="0" max="100" value="50" class="col-span-3 px-2 py-1.5 rounded-lg border border-slate-300 text-xs stp-comp-x">
+                <input type="number" min="0" max="100" value="50" class="col-span-3 px-2 py-1.5 rounded-lg border border-slate-300 text-xs stp-comp-y">
+                <button onclick="stpRemoveRow(this)" class="col-span-1 text-slate-400 hover:text-red-500 text-center"><i class="fa-solid fa-trash-can text-xs"></i></button>
+            `;
+            list.appendChild(div);
+            stpAttachRowListeners(div);
+            stpUpdateMap();
+        }
+
+        function stpRemoveRow(btn) {
+            btn.closest('.stp-comp-row').remove();
+            stpUpdateMap();
+        }
+
+        function stpAttachRowListeners(row) {
+            row.querySelectorAll('input').forEach(input => input.addEventListener('input', stpUpdateMap));
+        }
+
+        function stpUpdateMap() {
+            document.getElementById('stp-lblTop').innerText = document.getElementById('stp-yAxisTop').value || '상단';
+            document.getElementById('stp-lblBottom').innerText = document.getElementById('stp-yAxisBottom').value || '하단';
+            document.getElementById('stp-lblLeft').innerText = document.getElementById('stp-xAxisLeft').value || '좌측';
+            document.getElementById('stp-lblRight').innerText = document.getElementById('stp-xAxisRight').value || '우측';
+
+            const plotArea = document.getElementById('stp-mapPlotArea');
+            if (!plotArea) return;
+            plotArea.innerHTML = '';
+
+            document.querySelectorAll('.stp-comp-row').forEach((row, index) => {
+                const name = row.querySelector('.stp-comp-name').value || '브랜드';
+                const x = parseFloat(row.querySelector('.stp-comp-x').value) || 0;
+                const y = parseFloat(row.querySelector('.stp-comp-y').value) || 0;
+
+                const clampedX = Math.max(0, Math.min(100, x));
+                const clampedY = Math.max(0, Math.min(100, y));
+
+                const dot = document.createElement('div');
+                dot.className = 'absolute -translate-x-1/2 translate-y-1/2 flex flex-col items-center group cursor-pointer';
+                dot.style.left = `${clampedX}%`;
+                dot.style.bottom = `${clampedY}%`;
+
+                const isPrimary = index === 0;
+                dot.innerHTML = `
+                    <div class="w-3 h-3 rounded-full ${isPrimary ? 'bg-indigo-600 ring-2 ring-indigo-100 animate-pulse' : 'bg-slate-700'} shadow-sm"></div>
+                    <span class="absolute top-3 text-[9px] font-bold ${isPrimary ? 'text-indigo-700 bg-indigo-50 px-1 rounded' : 'text-slate-600 bg-white/90 px-1 rounded'} whitespace-nowrap">${name}</span>
+                `;
+                plotArea.appendChild(dot);
+            });
+        }
+
+        // STP Live Bindings
+        const stpFields = [
+            { input: 'stp-projectName', preview: 'stp-prevProjectName' },
+            { input: 'stp-projectSummary', preview: 'stp-prevSummary' },
+            { input: 'stp-segGroups', preview: 'stp-prevSeg', formatter: stpFormatSegmentation },
+            { input: 'stp-segCriteria', preview: 'stp-prevSeg', formatter: stpFormatSegmentation },
+            { input: 'stp-targetPrimary', preview: 'stp-prevTarget', formatter: stpFormatTargeting },
+            { input: 'stp-targetRationale', preview: 'stp-prevTarget', formatter: stpFormatTargeting },
+            { input: 'stp-posUVP', preview: 'stp-prevPos', formatter: stpFormatPositioning },
+            { input: 'stp-posStatement', preview: 'stp-prevPos', formatter: stpFormatPositioning },
+            { input: 'stp-xAxisLeft', callback: stpUpdateMap },
+            { input: 'stp-xAxisRight', callback: stpUpdateMap },
+            { input: 'stp-yAxisBottom', callback: stpUpdateMap },
+            { input: 'stp-yAxisTop', callback: stpUpdateMap }
+        ];
+
+        stpFields.forEach(item => {
+            const el = document.getElementById(item.input);
+            if (el) {
+                el.addEventListener('input', () => {
+                    if (item.formatter) {
+                        document.getElementById(item.preview).innerText = item.formatter();
+                    } else if (item.callback) {
+                        item.callback();
+                    } else {
+                        document.getElementById(item.preview).innerText = el.value;
+                    }
+                });
+            }
+        });
+        document.querySelectorAll('.stp-comp-row').forEach(row => stpAttachRowListeners(row));
+
+        // ================= 4P LOGIC =================
+        function p4FormatProduct() {
+            return `핵심 기능: ${document.getElementById('p4-prodFeatures').value}\n브랜딩 및 패키징: ${document.getElementById('p4-prodBranding').value}`;
+        }
+        function p4FormatPrice() {
+            return `전략: ${document.getElementById('p4-priceStrategy').value}\n할인 및 조건: ${document.getElementById('p4-priceDiscounts').value}`;
+        }
+        function p4FormatPlace() {
+            return `채널: ${document.getElementById('p4-placeChannels').value}\n물류: ${document.getElementById('p4-placeLogistics').value}`;
+        }
+        function p4FormatPromo() {
+            return `캠페인: ${document.getElementById('p4-promoAds').value}\nPR 및 촉진: ${document.getElementById('p4-promoPR').value}`;
+        }
+
+        const p4Fields = [
+            { input: 'p4-projectName', preview: 'p4-prevProjectName' },
+            { input: 'p4-projectSummary', preview: 'p4-prevSummary' },
+            { input: 'p4-prodFeatures', preview: 'p4-prevProduct', formatter: p4FormatProduct },
+            { input: 'p4-prodBranding', preview: 'p4-prevProduct', formatter: p4FormatProduct },
+            { input: 'p4-priceStrategy', preview: 'p4-prevPrice', formatter: p4FormatPrice },
+            { input: 'p4-priceDiscounts', preview: 'p4-prevPrice', formatter: p4FormatPrice },
+            { input: 'p4-placeChannels', preview: 'p4-prevPlace', formatter: p4FormatPlace },
+            { input: 'p4-placeLogistics', preview: 'p4-prevPlace', formatter: p4FormatPlace },
+            { input: 'p4-promoAds', preview: 'p4-prevPromo', formatter: p4FormatPromo },
+            { input: 'p4-promoPR', preview: 'p4-prevPromo', formatter: p4FormatPromo }
+        ];
+
+        p4Fields.forEach(item => {
+            const el = document.getElementById(item.input);
+            if (el) {
+                el.addEventListener('input', () => {
+                    document.getElementById(item.preview).innerText = item.formatter();
+                });
+            }
+        });
+
+        // Initialize default previews on load
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('stp-prevSeg').innerText = stpFormatSegmentation();
+            document.getElementById('stp-prevTarget').innerText = stpFormatTargeting();
+            document.getElementById('stp-prevPos').innerText = stpFormatPositioning();
+
+            document.getElementById('p4-prevProduct').innerText = p4FormatProduct();
+            document.getElementById('p4-prevPrice').innerText = p4FormatPrice();
+            document.getElementById('p4-prevPlace').innerText = p4FormatPlace();
+            document.getElementById('p4-prevPromo').innerText = p4FormatPromo();
+            stpUpdateMap();
+
+            // Initial load of KPI dummy / auto fetch
+            fetchSheetData();
+        });
+
+        // Export Functions
+        function downloadFile(content, filename, contentType) {
+            const blob = new Blob([content], { type: contentType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function stpExportHTML() {
+            const name = document.getElementById('stp-projectName').value || 'STP_전략';
+            const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><script src="https://cdn.tailwindcss.com"><\/script></head><body class="p-8 bg-slate-50"><div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow"><h1>${name} STP 전략</h1><p>${document.getElementById('stp-projectSummary').value}</p></div></body></html>`;
+            downloadFile(html, `${name}_stp.html`, 'text/html');
+        }
+        function stpExportMarkdown() {
+            const name = document.getElementById('stp-projectName').value || 'STP_전략';
+            const md = `# STP 전략: ${name}\n\n${document.getElementById('stp-projectSummary').value}`;
+            downloadFile(md, `${name}_stp.md`, 'text/markdown');
+        }
+        function p4ExportHTML() {
+            const name = document.getElementById('p4-projectName').value || '4P_전략';
+            const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><script src="https://cdn.tailwindcss.com"><\/script></head><body class="p-8 bg-slate-50"><div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow"><h1>${name} 4P 믹스</h1><p>${document.getElementById('p4-projectSummary').value}</p></div></body></html>`;
+            downloadFile(html, `${name}_4p.html`, 'text/html');
+        }
+        function p4ExportMarkdown() {
+            const name = document.getElementById('p4-projectName').value || '4P_전략';
+            const md = `# 4P 마케팅 믹스: ${name}\n\n${document.getElementById('p4-projectSummary').value}`;
+            downloadFile(md, `${name}_4p.md`, 'text/markdown');
+        }
+    </script>
+</body>
+</html>
